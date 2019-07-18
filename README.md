@@ -4,13 +4,19 @@
 
 [![Travis build status](https://travis-ci.org/dreamRs/shinylogs.svg?branch=master)](https://travis-ci.org/dreamRs/shinylogs)
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-
-
+[![version](http://www.r-pkg.org/badges/version/shinylogs)](https://CRAN.R-project.org/package=shinylogs)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
 
 ## Installation
 
-You can install from GitHub:
+Install from CRAN with :
+
+```r
+install.packages("shinylogs")
+```
+
+Or install dev version from GitHub:
 
 ``` r
 remotes::install_github("dreamRs/shinylogs")
@@ -161,5 +167,25 @@ Example of JSON created (with the [Kmeans example app](https://shiny.rstudio.com
 }
 ```
 
+
+## Graphical examples of recorded outputs
+
+Data recorded on our Shiny-Server available here: http://shinyapps.dreamrs.fr/
+
+![](man/figures/connections-apps.png)
+
+![](man/figures/connections-day.png)
+
+
+Which tabs in [shinyWidgets](https://github.com/dreamRs/shinyWidgets) gallery are the most seen : 
+
+![](man/figures/shinyWidgets-tabs.png)
+
+
+User-agent is recorded per connections and can be parsed with [uaparserjs](https://github.com/hrbrmstr/uaparserjs) :
+(unique users are not registered as we use the open source version of shiny-server)
+
+![](man/figures/ua-family.png)
+![](man/figures/ua-os.png)
 
 

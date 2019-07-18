@@ -1,14 +1,13 @@
 /*!
- * Copyright (c) 2018 dreamRs
+ * Copyright (c) 2019 dreamRs
  *
  * shinylogs, JavaScript bindings to record
  * everything happens in a Shiny app
- * using Lowdb
+ * using LocalForage
  * https://github.com/dreamRs/shinylogs
  *
- * @version 0.0.1
+ * @version 0.0.2
  */
-// on unload or not
 
 
 // config
@@ -72,14 +71,16 @@ var browser_connected = dayjs().format();
 
 // Send browser data
 if (logsonunload === false) {
-  Shiny.setInputValue(".shinylogs_browserData", {
-    user_agent: ua,
-    screen_res: screen_res,
-    browser_res: browser_res,
-    pixel_ratio: pixel_ratio,
-    browser_connected: browser_connected
-  }, {
-    priority: "event"
+  $(document).on("shiny:connected", function() {
+    Shiny.setInputValue(".shinylogs_browserData", {
+      user_agent: ua,
+      screen_res: screen_res,
+      browser_res: browser_res,
+      pixel_ratio: pixel_ratio,
+      browser_connected: browser_connected
+    }, {
+      priority: "event"
+    });
   });
 }
 
@@ -180,3 +181,6 @@ if (logsonunload === true) {
     return "Are you sure?";
   };
 }
+
+
+

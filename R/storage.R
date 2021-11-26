@@ -5,85 +5,11 @@
 #'
 #' @param path Path where to write JSON files.
 #'
+#' @return A list that can be used in [track_usage()].
+#'
 #' @export
 #'
-#' @examples
-#' if (interactive()) {
-#'
-#'   # temp directory for writing logs
-#'   tmp <- tempdir()
-#'
-#'   # when app stop,
-#'   # navigate to the directory containing logs
-#'   onStop(function() {
-#'     browseURL(url = tmp)
-#'   })
-#'
-#'   # Classir Iris clustering with Shiny
-#'   ui <- fluidPage(
-#'
-#'     headerPanel("Iris k-means clustering"),
-#'
-#'     sidebarLayout(
-#'       sidebarPanel(
-#'         selectInput(
-#'           inputId = "xcol",
-#'           label = "X Variable",
-#'           choices = names(iris)
-#'         ),
-#'         selectInput(
-#'           inputId = "ycol",
-#'           label = "Y Variable",
-#'           choices = names(iris),
-#'           selected = names(iris)[[2]]
-#'         ),
-#'         numericInput(
-#'           inputId = "clusters",
-#'           label = "Cluster count",
-#'           value = 3,
-#'           min = 1,
-#'           max = 9
-#'         )
-#'       ),
-#'       mainPanel(
-#'         plotOutput("plot1")
-#'       )
-#'     )
-#'   )
-#'
-#'   server <- function(input, output, session) {
-#'
-#'     # Store JSON with logs in the temp dir
-#'     track_usage(
-#'       storage_mode = store_json(path = tmp)
-#'     )
-#'
-#'     # classic server logic
-#'
-#'     selectedData <- reactive({
-#'       iris[, c(input$xcol, input$ycol)]
-#'     })
-#'
-#'     clusters <- reactive({
-#'       kmeans(selectedData(), input$clusters)
-#'     })
-#'
-#'     output$plot1 <- renderPlot({
-#'       palette(c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3",
-#'                 "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999"))
-#'
-#'       par(mar = c(5.1, 4.1, 0, 1))
-#'       plot(selectedData(),
-#'            col = clusters()$cluster,
-#'            pch = 20, cex = 3)
-#'       points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
-#'     })
-#'
-#'   }
-#'
-#'   shinyApp(ui, server)
-#'
-#' }
+#' @example examples/store_json.R
 store_json <- function(path) {
   path <- normalizePath(path = path, mustWork = FALSE)
   if (!dir.exists(path))
@@ -100,73 +26,16 @@ store_json <- function(path) {
 
 #' @title No storage on disk
 #'
-#' @description Doesn't write anything, special inputs created by \code{track_usage}
+#' @description Doesn't write anything, special inputs created by [track_usage()]
 #'  are available in server and optionally logs are printed in console.
 #'
 #' @param console Print logs in R console.
 #'
+#' @return A list that can be used in [track_usage()].
+#'
 #' @export
 #'
-#' @examples
-#' if (interactive()) {
-#'   library(shiny)
-#'   library(shinylogs)
-#'
-#'   ui <- fluidPage(
-#'     tags$h2("Record inputs change"),
-#'     fluidRow(
-#'       column(
-#'         width = 3,
-#'         selectInput(
-#'           inputId = "select",
-#'           label = "Select input",
-#'           choices = month.name
-#'         ),
-#'         numericInput(
-#'           inputId = "numeric",
-#'           label = "Numerci input",
-#'           value = 4,
-#'           min = 0, max = 20
-#'         ),
-#'         checkboxGroupInput(
-#'           inputId = "checkboxGroup",
-#'           label = "Checkbox group input",
-#'           choices = LETTERS[1:5]
-#'         ),
-#'         sliderInput(
-#'           inputId = "slider",
-#'           label = "Slider input",
-#'           min = 0, max = 100, value = 50
-#'         )
-#'       ),
-#'       column(
-#'         width = 9,
-#'         tags$b("Last input:"),
-#'         verbatimTextOutput(outputId = "last_input"),
-#'         tags$b("Last input:"),
-#'         verbatimTextOutput(outputId = "all_inputs")
-#'       )
-#'     )
-#'   )
-#'
-#'   server <- function(input, output, session) {
-#'
-#'     track_usage(
-#'       storage_mode = store_null() # dont store on disk
-#'     )
-#'
-#'     output$last_input <- renderPrint({
-#'       input$.shinylogs_lastInput # last input triggered
-#'     })
-#'
-#'     output$all_inputs <- renderPrint({
-#'       input$.shinylogs_input # all inputs that have changed
-#'     })
-#'
-#'   }
-#'
-#'   shinyApp(ui, server)
-#' }
+#' @example examples/store_null.R
 store_null <- function(console = TRUE) {
   store <- list(
     console = console,
@@ -184,85 +53,11 @@ store_null <- function(console = TRUE) {
 #'
 #' @param path Path where to write RDS files.
 #'
+#' @return A list that can be used in [track_usage()].
+#'
 #' @export
 #'
-#' @examples
-#' if (interactive()) {
-#'
-#'   # temp directory for writing logs
-#'   tmp <- tempdir()
-#'
-#'   # when app stop,
-#'   # navigate to the directory containing logs
-#'   onStop(function() {
-#'     browseURL(url = tmp)
-#'   })
-#'
-#'   # Classir Iris clustering with Shiny
-#'   ui <- fluidPage(
-#'
-#'     headerPanel("Iris k-means clustering"),
-#'
-#'     sidebarLayout(
-#'       sidebarPanel(
-#'         selectInput(
-#'           inputId = "xcol",
-#'           label = "X Variable",
-#'           choices = names(iris)
-#'         ),
-#'         selectInput(
-#'           inputId = "ycol",
-#'           label = "Y Variable",
-#'           choices = names(iris),
-#'           selected = names(iris)[[2]]
-#'         ),
-#'         numericInput(
-#'           inputId = "clusters",
-#'           label = "Cluster count",
-#'           value = 3,
-#'           min = 1,
-#'           max = 9
-#'         )
-#'       ),
-#'       mainPanel(
-#'         plotOutput("plot1")
-#'       )
-#'     )
-#'   )
-#'
-#'   server <- function(input, output, session) {
-#'
-#'     # Store RDS with logs in the temp dir
-#'     track_usage(
-#'       storage_mode = store_rds(path = tmp)
-#'     )
-#'
-#'     # classic server logic
-#'
-#'     selectedData <- reactive({
-#'       iris[, c(input$xcol, input$ycol)]
-#'     })
-#'
-#'     clusters <- reactive({
-#'       kmeans(selectedData(), input$clusters)
-#'     })
-#'
-#'     output$plot1 <- renderPlot({
-#'       palette(c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3",
-#'                 "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999"))
-#'
-#'       par(mar = c(5.1, 4.1, 0, 1))
-#'       plot(selectedData(),
-#'            col = clusters()$cluster,
-#'            pch = 20, cex = 3)
-#'       points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
-#'     })
-#'
-#'   }
-#'
-#'   shinyApp(ui, server)
-#'
-#' }
+#' @example examples/store_rds.R
 store_rds <- function(path) {
   path <- normalizePath(path = path, mustWork = FALSE)
   if (!dir.exists(path))
@@ -283,85 +78,11 @@ store_rds <- function(path) {
 #'
 #' @param path Path to the SQLite file or a directory where to create one.
 #'
+#' @return A list that can be used in [track_usage()].
+#'
 #' @export
 #'
-#' @examples
-#' if (interactive()) {
-#'
-#'   # temp directory for writing logs
-#'   tmp <- tempdir()
-#'
-#'   # when app stop,
-#'   # navigate to the directory containing logs
-#'   onStop(function() {
-#'     browseURL(url = tmp)
-#'   })
-#'
-#'   # Classir Iris clustering with Shiny
-#'   ui <- fluidPage(
-#'
-#'     headerPanel("Iris k-means clustering"),
-#'
-#'     sidebarLayout(
-#'       sidebarPanel(
-#'         selectInput(
-#'           inputId = "xcol",
-#'           label = "X Variable",
-#'           choices = names(iris)
-#'         ),
-#'         selectInput(
-#'           inputId = "ycol",
-#'           label = "Y Variable",
-#'           choices = names(iris),
-#'           selected = names(iris)[[2]]
-#'         ),
-#'         numericInput(
-#'           inputId = "clusters",
-#'           label = "Cluster count",
-#'           value = 3,
-#'           min = 1,
-#'           max = 9
-#'         )
-#'       ),
-#'       mainPanel(
-#'         plotOutput("plot1")
-#'       )
-#'     )
-#'   )
-#'
-#'   server <- function(input, output, session) {
-#'
-#'     # Store RDS with logs in the temp dir
-#'     track_usage(
-#'       storage_mode = store_sqlite(path = tmp)
-#'     )
-#'
-#'     # classic server logic
-#'
-#'     selectedData <- reactive({
-#'       iris[, c(input$xcol, input$ycol)]
-#'     })
-#'
-#'     clusters <- reactive({
-#'       kmeans(selectedData(), input$clusters)
-#'     })
-#'
-#'     output$plot1 <- renderPlot({
-#'       palette(c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3",
-#'                 "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999"))
-#'
-#'       par(mar = c(5.1, 4.1, 0, 1))
-#'       plot(selectedData(),
-#'            col = clusters()$cluster,
-#'            pch = 20, cex = 3)
-#'       points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
-#'     })
-#'
-#'   }
-#'
-#'   shinyApp(ui, server)
-#'
-#' }
+#' @example examples/store_sqlite.R
 store_sqlite <- function(path) {
   path <- normalizePath(path = path, mustWork = FALSE)
   if (is_sqlite(path)) {
@@ -381,6 +102,77 @@ store_sqlite <- function(path) {
 }
 
 
+
+#' @title Use Google Drive as storage mode
+#'
+#' @description All logs will be written in the same file.
+#'
+#' @param path Path to folder on Drive where to send logs.
+#'
+#' @return A list that can be used in [track_usage()].
+#'
+#' @note See the {gargle} package to manage authentication, and especially
+#'  [this vignette from {gargle} package](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html) to manage the process.
+#'
+#' @export
+#'
+#'
+#' @examples
+#' \dontrun{
+#' # In your global, manage Google Drive access
+#' drive_auth(path = "/path/to/your/service-account-token.json")
+#' # see https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html
+#' # to manage your token securely
+#'
+#' # Then in server, use:
+#' track_usage(storage_mode = store_googledrive(path = "my-logs/"))
+#'
+#' # you may have to share my-logs/ folder with your service account
+#'
+#' }
+store_googledrive <- function(path) {
+  if (!requireNamespace(package = "googledrive"))
+    message("store_googledrive: Package 'googledrive' is required to run this function")
+  if (!googledrive::drive_has_token()) {
+    warning("store_googledrive: no token for Google Drive API found, using store_null(console = TRUE) as fallback.")
+    return(store_null(console = TRUE))
+  }
+  store <- list(
+    mode = "googledrive",
+    path = path
+  )
+  class(store) <- c(class(store), "shinylogs.storage_mode")
+  return(store)
+}
+
+
+#' @title Use custom function to save logs
+#'
+#' @description Store logs tracked where you want by providing a custom
+#'  function to write them in your prefered location.
+#'
+#' @param FUN A `function` that take at least one argument `logs`, that will correspond to logs recorded as a `list`.
+#' @param ... Extra parameters that will be passed to `FUN`.
+#'
+#' @return A list that can be used in [track_usage()].
+#' @export
+#'
+#' @example examples/store_custom.R
+store_custom <- function(FUN, ...) {
+  FUN <- match.fun(FUN)
+  store <- list(
+    mode = "custom",
+    FUN = FUN,
+    extra = list(...)
+  )
+  class(store) <- c(class(store), "shinylogs.storage_mode")
+  return(store)
+}
+
+
+
+# Gather all methods ------------------------------------------------------
+
 write_logs <- function(opts, logs) {
   if (opts$mode == "json") {
     write_logs_json(opts, logs)
@@ -390,10 +182,32 @@ write_logs <- function(opts, logs) {
     invisible()
   } else if (opts$mode == "sqlite") {
     write_logs_sqlite(opts, logs)
+  } else if (opts$mode == "googledrive") {
+    write_logs_googledrive(opts, logs)
+  } else if (opts$mode == "custom") {
+
+    tryCatch(
+      do.call(
+        what = opts$FUN,
+        args = c(list(logs = logs), opts$extra)
+      ),
+      error = function(e) {
+        warning(
+          "Error in writing logs with custom storage: ",
+          e$message,
+          call. = FALSE
+        )
+      }
+    )
+
   } else {
-    stop("Not implemented!", call. = FALSE)
+    stop("Storage mode not implemented!", call. = FALSE)
   }
 }
+
+
+
+# Write methods -----------------------------------------------------------
 
 #' @importFrom jsonlite write_json
 write_logs_json <- function(opts, logs) {
@@ -414,10 +228,26 @@ write_logs_rds <- function(opts, logs) {
   return(invisible(path))
 }
 
+#' @importFrom jsonlite write_json
+write_logs_googledrive <- function(opts, logs) {
+  if (!requireNamespace(package = "googledrive"))
+    message("store_googledrive: Package 'googledrive' is required to run this function")
+  path <- tempfile(fileext = ".json")
+  jsonlite::write_json(x = logs, path = path, auto_unbox = TRUE)
+  googledrive::drive_upload(
+    media = path,
+    path = opts$path,
+    name = paste0("shinylogs_", opts$appname, "_", opts$timestamp, ".json")
+  )
+  return(invisible(opts$path))
+}
 
-#' @importFrom DBI dbConnect dbDisconnect dbWriteTable
-#' @importFrom RSQLite SQLite
+
 write_logs_sqlite <- function(opts, logs) {
+  if (!requireNamespace(package = "DBI"))
+    message("store_sqlite: Package 'DBI' is required to run this function")
+  if (!requireNamespace(package = "RSQLite"))
+    message("store_sqlite: Package 'RSQLite' is required to run this function")
   con <- DBI::dbConnect(drv = RSQLite::SQLite(), dbname = opts$path)
   on.exit(DBI::dbDisconnect(conn = con))
   lapply(

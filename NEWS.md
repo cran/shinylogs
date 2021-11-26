@@ -1,3 +1,11 @@
+# shinylogs 0.2.0
+
+* Timestamp is now recorded in microseconds (fix [#6](https://github.com/dreamRs/shinylogs/issues/6)).
+* Added `store_googledrive()` to store logs as json in Google drive.
+* Added `store_custom()` to use a custom function to deal with logs generated.
+* Use [{packer}](https://github.com/JohnCoene/packer) to manage JavaScript assets.
+
+
 # shinylogs 0.1.7
 
 * Fix a bug when used with {shinymanager} (fix [#2](https://github.com/dreamRs/shinylogs/issues/2)).

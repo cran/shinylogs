@@ -3,7 +3,7 @@
 #'
 #' @param path Path of the directory containing JSON files or a vector of path to JSON files.
 #'
-#' @return a list of \code{data.table}
+#' @return a `list` of `data.table`
 #' @export
 #'
 #' @importFrom jsonlite fromJSON
@@ -33,7 +33,7 @@ read_json_logs <- function(path) {
 #'
 #' @param path Path of the directory containing RDS files or a vector of path to RDS files.
 #'
-#' @return a list of \code{data.table}
+#' @return a `list` of `data.table`
 #' @export
 #'
 #' @importFrom jsonlite fromJSON
@@ -41,7 +41,7 @@ read_json_logs <- function(path) {
 #' @importFrom stats setNames
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Read all RDS in a directory
 #' logs <- read_rds_logs(path = "path/to/directory")
 #'
@@ -55,6 +55,7 @@ read_rds_logs <- function(path) {
 read_logs <- function(path, what) {
   if (length(path) == 1 && dir.exists(path)) {
     files <- list.files(path = path, pattern = sprintf("\\.%s$", what), full.names = TRUE)
+    files <- files[file.size(files) > 0]
     if (length(files) == 0) {
       stop(sprintf("No %s files to read in specified path", toupper(what)), call. = FALSE)
     }
@@ -64,7 +65,7 @@ read_logs <- function(path, what) {
     files <- normalizePath(path, mustWork = TRUE)
   } else {
     stop(sprintf(
-      "'path' must be a directory containing %s files or a %s file",
+      "'path' must be either:\n - a directory containing %s files\n - a single %s file",
       toupper(what), toupper(what)
     ), call. = FALSE)
   }

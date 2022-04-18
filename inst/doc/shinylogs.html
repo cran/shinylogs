@@ -26,6 +26,7 @@
     </style>
 
 
+
 <style type="text/css">
   code {
     white-space: pre;
@@ -173,12 +174,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="shinyproxy" class="section level3">
 <h3>ShinyProxy</h3>
-<p>With ShinyProxy, you can use a Docker volume to write logs outside of the application container. In <code>application.yml</code>, you can something like this in the specs describing the application:</p>
+<p>With <a href="https://www.shinyproxy.io/">ShinyProxy</a>, you can use a Docker volume to write logs outside of the application container. In <code>application.yml</code>, you can something like this in the specs describing the application:</p>
 <pre><code>container-volumes: [ &quot;/var/log/shinylogs:/root/logs&quot; ]</code></pre>
+<p><code>/var/log/shinylogs</code> is a directory on the server where you deploy your applications with ShinyProxy. <code>/root/logs</code> is a directory inside your Docker image, it’s the path you can use in <code>track_usage()</code>, e.g. :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">track_usage</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">storage_mode =</span> <span class="fu">store_json</span>(<span class="at">path =</span> <span class="st">&quot;/root/logs&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 </div>
 <div id="shinyapps.io" class="section level3">
 <h3>shinyapps.io</h3>
 <p>There’s no persistent data storage on shinyapps.io, so you can’t save logs as JSON or RDS files, you have to use a remote storage method. You can use the builtin method provided to send logs in Googledrive with <code>store_googledrive</code> or use <code>store_custom</code> to send logs wherever you want (dropbox, remote database, …).</p>
+<p>To use Googledrive, you’ll need to work with Google’s API and set auth to your account, see <a href="https://gargle.r-lib.org/index.html">{gargle} documentation</a> for examples and how to.</p>
 </div>
 </div>
 <div id="recorded-informations" class="section level2">
